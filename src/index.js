@@ -9,26 +9,14 @@ const swaggerUI = require('swagger-ui-express');
 const docs = require('./docs/index.js');
 const PORT = process.env.PORT || 8080;
 const hashedSecret = require('./config/config.js');
-
-//const mongoose = require('mongoose');
 const MongoStore = require('connect-mongo');
-
 app.disable('x-powered-by');
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-
-/*mongoose.connect(process.env.MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useCreateIndex: true,
-})*/
-
 const mongoStoreOptions = {
     mongoUrl: process.env.MONGO_URI,
     collectionName: 'sessions'
 }
-
 app.use(
     session({
         secret: hashedSecret,
@@ -39,15 +27,11 @@ app.use(
         cookie: {secure: false}
     })
 );
-
 app.use(express.static('public'));
-
 app.use('/api', apiRoutes, swaggerUI.serve, swaggerUI.setup(docs));
 app.use('/', routes);
 app.use('/', authRoutes);
-
 dbConnection();
-
 app.listen(PORT, () => {
     console.log(`Server started on http://localhost:${PORT}`);
 })
