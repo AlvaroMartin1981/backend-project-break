@@ -13,6 +13,9 @@ const MongoStore = require('connect-mongo');
 app.disable('x-powered-by');
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+dbConnection();
+
 const mongoStoreOptions = {
     mongoUrl: process.env.MONGO_URI,
     collectionName: 'sessions'
@@ -31,7 +34,9 @@ app.use(express.static('public'));
 app.use('/api', apiRoutes, swaggerUI.serve, swaggerUI.setup(docs));
 app.use('/', routes);
 app.use('/', authRoutes);
-dbConnection();
+
+
+
 app.listen(PORT, () => {
     console.log(`Server started on http://localhost:${PORT}`);
 })

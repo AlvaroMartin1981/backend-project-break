@@ -145,7 +145,8 @@ const showProductsLogin = async (req,res) => {
         const products = await Product.find();
         res.send(getNavBar(path) + getProducts(path, products));
     } catch (error) {
-        res.status(500).send({ message: 'There was a problem trying get all products'})
+        console.log('error' , error);
+        return res.status(500).send({ message: 'There was a problem trying get all products'})
     }
 };
 

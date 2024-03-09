@@ -77,9 +77,15 @@ const authController = {
             return;
         });     
     },
-    logout(req,res) {
+    async logout(req, res) {
         signOut(auth)
-        res.redirect('/products/');
+            .then(() => {
+                res.redirect('/products/');
+            })
+            .catch((error) => {
+                console.error('Error durante el logout:', error);
+                res.redirect('/products/');
+            });
     }
 }
 

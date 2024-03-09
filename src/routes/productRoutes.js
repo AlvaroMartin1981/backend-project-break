@@ -13,7 +13,7 @@ router.get('/', (req,res) => {
 router.get('/products/', productController.showProductsByCategory);
 router.get('/products/', productController.showProducts);
 router.get('/products/:productId', productController.showProductById);
-router.get('/dashboard/', checkSession, productController.showProductsByCategory);
+router.get('/dashboard/', productController.showProductsByCategory);
 router.get('/dashboard/', checkSession, productController.showProductsLogin);
 router.get('/dashboard/new', checkSession, productController.showNewProductForm);
 router.get('/dashboard/:productId', checkSession, productController.showProductByIdLogin);
