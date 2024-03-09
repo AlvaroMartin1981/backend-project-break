@@ -10,13 +10,11 @@ router.get('/', (req,res) => {
     res.redirect('/products/');
 });
 
-router.get('/products/', productController.showProductsByCategory);
 router.get('/products/', productController.showProducts);
 router.get('/products/:productId', productController.showProductById);
-router.get('/dashboard/', productController.showProductsByCategory);
-router.get('/dashboard/', checkSession, productController.showProductsLogin);
+router.get('/dashboard/', checkSession, productController.showProducts);
 router.get('/dashboard/new', checkSession, productController.showNewProductForm);
-router.get('/dashboard/:productId', checkSession, productController.showProductByIdLogin);
+router.get('/dashboard/:productId', checkSession, productController.showProductById);
 router.post('/dashboard/', checkSession, productController.createProduct);
 router.put('/dashboard/:productId', checkSession, productController.updateProductById);
 router.get('/dashboard/:productId/edit', checkSession, productController.showEditProductForm);

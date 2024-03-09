@@ -27,8 +27,6 @@ const getNavBar = (path) => {
                         </ul>
                     </nav>
                     <h2 class="title">Productos</h2>
-                </body>
-            </html>
         `
     } else {
         html = `
@@ -52,8 +50,6 @@ const getNavBar = (path) => {
                         </ul>
                     </nav>
                     <h2 class="title">Productos</h2>
-                </body>
-            </html>
         `
     }
     return html;
@@ -73,7 +69,9 @@ const getProducts = (path, products) => {
                     </li>
                 `;        
     }
-    html += '</ul>';
+    html += `</ul>
+            </body>
+            </html>`;
     return html;
 };
 
@@ -95,7 +93,9 @@ const getProduct = (path, product) => {
                     <a href="${path}${product._id}/delete"><button class="buttons">Borrar</button></a>
                 </div>
             </div>
-        </div>    
+        </div>
+        </body>
+        </html>    
         `
     } else {
         html += `
@@ -109,26 +109,22 @@ const getProduct = (path, product) => {
                 <p>Talla: ${product.size}</p>
                 <a href="/products/"><button class="buttons">Volver</button></a>
             </div>
-        </div>    
+        </div>
+        </body>
+        </html>
         `
     }
     return html;
 };
 
-
-const showProducts = async (req,res) => {
-    try {
-        const path = req.path;
-        const products = await Product.find();
-        res.send(getNavBar(path) + getProducts(path, products));
-    } catch (error) {
-        res.status(500).send({ message: 'There was a problem trying get all products'})
-    }
-};
-
 const showProductById = async (req,res) => {
+    let path;
     try {
-        const path = req.path;
+        if(req.path.includes('/products')) {
+            path =  '/products/';
+        } else {
+            path = '/dashboard/';
+        }
         const product = await Product.findById(req.params.productId);
         if (!product) {
             return res.status(404).send({message: 'Product not found'})
@@ -139,27 +135,20 @@ const showProductById = async (req,res) => {
     }
 };
 
-const showProductsLogin = async (req,res) => {
+const showProducts = async (req,res) => {
+    const path = req.path;
+    const category = req.query.category;
     try {
-        const path = req.path;
-        const products = await Product.find();
+        let products;
+        if(category) {
+            products = await Product.find({ category: category });
+        } else {
+            products = await Product.find();
+        }
         res.send(getNavBar(path) + getProducts(path, products));
     } catch (error) {
         console.log('error' , error);
         return res.status(500).send({ message: 'There was a problem trying get all products'})
-    }
-};
-
-const showProductByIdLogin = async (req,res) => {
-    try {
-        const path = req.path.includes('/dashboard') ? '/dashboard/' : '';
-        const product = await Product.findById(req.params.productId);
-        if (!product) {
-            return res.status(404).send({message: 'Product not found'})
-        }
-        res.send(getNavBar(path) + getProduct(path, product));
-    } catch (error) {
-        res.status(500).send({message: 'Error getting the product'});
     }
 };
 
@@ -211,6 +200,8 @@ const showNewProductForm = async (req,res) => {
                     </form>
                 </div>
             </div>
+            </body>
+            </html>
         `)
     } catch (error) {
         res.status(500).send({ message: "There was a problem trying to create a product" });
@@ -321,33 +312,17 @@ const deleteProductById = async (req,res) => {
 };
 
 
-const showProductsByCategory = async (req, res) => {
-    const path = req.path;
-    const category = req.query.category;
-    try {
-        let products;
-        if(category){
-            products = await Product.find({ category: category });
-        }else{
-            products = await Product.find();
-        }
-        res.send(getNavBar(path, category) + getProducts(path, products)); 
-    } catch (error) {
-        res.status(500).send({ message: "Error when filtering products"});
-    }
-};
+
 
 module.exports = {
     getNavBar,
     getProducts,
     showProducts,
     showProductById,
-    showProductsLogin,
-    showProductByIdLogin,
+    //showProductByIdLogin,
     showNewProductForm, 
     createProduct,
     updateProductById, 
     showEditProductForm,
     deleteProductById,
-    showProductsByCategory
 }; 

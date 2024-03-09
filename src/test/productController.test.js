@@ -32,17 +32,17 @@ describe('getNavBar', () => {
                 </head>
                 <body>
                     <nav class="navbar">
-                        <a href="/dashboard/">Productos</a>
-                        <a href="/dashboard/?category=camisetas">Camisetas</a>
-                        <a href="/dashboard/?category=pantalones">Pantalones</a>
-                        <a href="/dashboard/?category=zapatos">Zapatos</a>
-                        <a href="/dashboard/?category=accesorios">Accesorios</a>
-                        <a href="/dashboard/new">Nuevo Producto</a>
-                        <a href="">Logout</a>
+                        <ul>
+                            <li><a href="/dashboard/">Productos</a></li>
+                            <li><a href="/dashboard/?category=camisetas">Camisetas</a></li>
+                            <li><a href="/dashboard/?category=pantalones">Pantalones</a></li>
+                            <li><a href="/dashboard/?category=zapatos">Zapatos</a></li>
+                            <li><a href="/dashboard/?category=accesorios">Accesorios</a></li>
+                            <li><a href="/dashboard/new">Nuevo Producto</a></li>
+                            <li><a href="/logout">Logout</a>
+                        </ul>
                     </nav>
                     <h2 class="title">Productos</h2>
-                </body>
-            </html>
         `
         expect(getNavBar(path)).toBe(expectedHTML);
     });
@@ -59,16 +59,16 @@ describe('getNavBar', () => {
                 </head>
                 <body>
                     <nav class="navbar">
-                        <a href="/products/">Productos</a>
-                        <a href="/products/?category=camisetas">Camisetas</a>
-                        <a href="/products/?category=pantalones">Pantalones</a>
-                        <a href="/products/?category=zapatos">Zapatos</a>
-                        <a href="/products/?category=accesorios">Accesorios</a>
-                        <a href="">Login</a>
+                        <ul>
+                            <li><a href="/products/">Productos</a></li>
+                            <li><a href="/products/?category=camisetas">Camisetas</a></li>
+                            <li><a href="/products/?category=pantalones">Pantalones</a></li>
+                            <li><a href="/products/?category=zapatos">Zapatos</a></li>
+                            <li><a href="/products/?category=accesorios">Accesorios</a></li>
+                            <li><a href="/login">Login</a>
+                        </ul>
                     </nav>
                     <h2 class="title">Productos</h2>
-                </body>
-            </html>
         `
         expect(getNavBar(path)).toBe(expectedHTML);
     })
@@ -86,32 +86,21 @@ describe('getProducts', () => {
                 price: 10, 
                 category: 'Category 1', 
                 size: 'M' 
-            },
-            { 
-                _id: 2, 
-                name: 'Product 2', 
-                description: 'Description 2', 
-                image: '', 
-                price: 20, 
-                category: 'Category 2', 
-                size: 'L' 
             }
         ];
         const expectedHTML = `
-                    <div class="product-card">
+<ul class="products-list">
+                    <li class="product-card">
                         <h3>Product 1</h3>
                         <img src="/images/" alt="Product 1">
                         <p>Description 1</p>
                         <p>10€</p>
-                        <button><a href="${path}1">Ver</a></button>
-                    </div>
-                    <div class="product-card">
-                        <h3>Product 2</h3>
-                        <img src="/images/" alt="Product 2">
-                        <p>Description 2</p>
-                        <p>20€</p>
-                        <button><a href="${path}2">Ver</a></button>
-                    </div>`
+                        <a href="${path}1"><button class="buttons">Ver</button></a>
+                    </li>
+                </ul>
+            </body>
+            </html>
+            `
 
         expect(getProducts(path, products)).toBe(expectedHTML);
     })
@@ -272,6 +261,27 @@ describe('showNewProductForm', () => {
     });
     it('should return HTML for the new product form', async () => {
         const expectedHTML = `
+        <!DOCTYPE html>
+        <html lang="es">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <link rel="stylesheet" href="/styles.css">
+                <title>Tienda</title>
+            </head>
+            <body>
+                <nav class="navbar">
+                    <ul>
+                        <li><a href="/dashboard/">Productos</a></li>
+                        <li><a href="/dashboard/?category=camisetas">Camisetas</a></li>
+                        <li><a href="/dashboard/?category=pantalones">Pantalones</a></li>
+                        <li><a href="/dashboard/?category=zapatos">Zapatos</a></li>
+                        <li><a href="/dashboard/?category=accesorios">Accesorios</a></li>
+                        <li><a href="/dashboard/new">Nuevo Producto</a></li>
+                        <li><a href="/logout">Logout</a>
+                    </ul>
+                </nav>
+                <h2 class="title">Productos</h2>
             <div class="new-product">
                 <h2>Crear producto</h2>
                 <div class="form">
@@ -315,6 +325,8 @@ describe('showNewProductForm', () => {
                     </form>
                 </div>
             </div>
+            </body>
+            </html>
         `
         const req = { path: '/dashboard' };
         const res = { send: jest.fn()};
